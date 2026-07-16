@@ -1,0 +1,33 @@
+balance_controller:
+  ros__parameters:
+    control_rate_hz: 100.0
+
+    # Physical parameters. Update this when the real robot arrives.
+    wheel_radius_m: 0.034
+
+    # Acceleration PID for upright balance.
+    # a_base = ka*theta + kwa*theta_dot - kx*x - kv*v
+    # The acceleration is integrated to a wheel speed command.
+    tilt_accel_gain_m_s2_per_rad: 45.0
+    tilt_rate_accel_gain_m_s2_per_rad_s: 9.0
+    position_kp: 0.18
+    velocity_kd: 0.35
+
+    # Near upright, do not integrate tiny IMU bias into runaway wheel speed.
+    upright_tilt_window_rad: 0.004
+    upright_rate_window_rad_s: 0.020
+    upright_position_kp: 0.10
+    upright_velocity_kd: 0.45
+    max_position_tilt_rad: 0.12
+
+    max_base_velocity_m_s: 0.52
+    max_base_accel_m_s2: 6.0
+    max_wheel_speed_rad_s: 18.85
+    max_wheel_accel_rad_s2: 180.0
+    max_tilt_rad: 1.25
+    deadband_rad: 0.002
+    rate_deadband_rad_s: 0.006
+    pitch_filter_alpha: 0.60
+    rate_filter_alpha: 0.40
+    command_sign: 1.0
+    publish_debug: true

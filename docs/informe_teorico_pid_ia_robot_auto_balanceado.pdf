@@ -1,0 +1,424 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Oblique >>
+endobj
+4 0 obj
+<< /Length 794 >>
+stream
+q 0.960 0.980 0.990 rg 1.000 1.000 1.000 RG 0.0 w 0.0 0.0 595.0 842.0 re B Q
+q 1.000 1.000 1.000 rg 0.120 0.470 0.700 RG 1.4 w 54.0 560.0 487.0 160.0 re B Q
+BT 0.120 0.470 0.700 rg /F2 18.0 Tf 78.0 680.0 Td (Informe teorico) Tj ET
+BT 0.080 0.130 0.180 rg /F2 26.0 Tf 78.0 642.0 Td (Robot auto-balanceado 2D) Tj ET
+BT 0.080 0.130 0.180 rg /F2 20.0 Tf 78.0 608.0 Td (PID clasico vs PID potenciado por IA) Tj ET
+BT 0.200 0.240 0.280 rg /F1 13.0 Tf 54.0 500.0 Td (Proyecto educativo para simulacion, analisis y comparacion de controladores) Tj ET
+BT 0.350 0.390 0.440 rg /F3 12.0 Tf 54.0 474.0 Td (Modelo 2D simplificado previo a Gazebo y pruebas en robot fisico) Tj ET
+BT 0.350 0.390 0.440 rg /F1 9.5 Tf 54.0 110.0 Td (Archivo generado automaticamente desde el proyecto Self_Balancing_Robot) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 24 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 2823 >>
+stream
+BT 0.080 0.130 0.180 rg /F2 18.0 Tf 54.0 788.0 Td (1. Proposito del informe) Tj ET
+q 0.120 0.470 0.700 RG 1.2 w 54.0 772.0 m 541.0 772.0 l S Q
+q 0.720 0.750 0.780 RG 0.6 w 54.0 36.0 m 541.0 36.0 l S Q
+BT 0.350 0.390 0.440 rg /F3 8.5 Tf 54.0 22.0 Td (Robot auto-balanceado 2D - PID vs PID IA) Tj ET
+BT 0.350 0.390 0.440 rg /F1 8.5 Tf 507.0 22.0 Td (Pagina 2) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 748.0 Td (Este informe presenta la base teorica para comprender y comparar dos estrategias de) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 733.5 Td (control aplicadas a un robot auto-balanceado de dos ruedas: un PID clasico y un PID) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 719.0 Td (potenciado por inteligencia artificial mediante mezcla de expertos.) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 700.5 Td (La simulacion 2D permite aislar el problema principal del equilibrio antes de) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 686.0 Td (incorporar detalles de Gazebo, como geometria 3D, friccion, colisiones, sensores) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 671.5 Td (simulados y configuracion de joints.) Tj ET
+BT 0.120 0.220 0.310 rg /F2 13.5 Tf 54.0 645.0 Td (Objetivos especificos) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 627.0 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 627.0 Td (Explicar por que el robot puede modelarse como un pendulo invertido sobre una) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 613.0 Td (base movil.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 599.0 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 599.0 Td (Relacionar el error angular con la accion de control aplicada a las ruedas.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 585.0 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 585.0 Td (Distinguir el comportamiento de un PID con ganancias fijas y uno con ganancias) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 571.0 Td (adaptativas.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 557.0 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 557.0 Td (Interpretar metricas como inclinacion maxima, error acumulado y esfuerzo de) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 543.0 Td (motor.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 529.0 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 529.0 Td (Preparar el paso metodologico desde simulacion 2D hacia Gazebo y robot fisico.) Tj ET
+BT 0.120 0.220 0.310 rg /F2 13.5 Tf 54.0 507.0 Td (Flujo recomendado) Tj ET
+q 0.940 0.960 0.980 rg 0.700 0.750 0.800 RG 1.0 w 54.0 447.0 487.0 50.0 re B Q
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 475.0 Td (Modelo teorico 2D  ->  Simulacion Gazebo 3D  ->  Robot fisico) Tj ET
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 460.0 Td (Primero se valida la idea de control; despues se agregan realismo y restricciones.) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 24 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 2774 >>
+stream
+BT 0.080 0.130 0.180 rg /F2 18.0 Tf 54.0 788.0 Td (2. Modelo como pendulo invertido) Tj ET
+q 0.120 0.470 0.700 RG 1.2 w 54.0 772.0 m 541.0 772.0 l S Q
+q 0.720 0.750 0.780 RG 0.6 w 54.0 36.0 m 541.0 36.0 l S Q
+BT 0.350 0.390 0.440 rg /F3 8.5 Tf 54.0 22.0 Td (Robot auto-balanceado 2D - PID vs PID IA) Tj ET
+BT 0.350 0.390 0.440 rg /F1 8.5 Tf 507.0 22.0 Td (Pagina 3) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 748.0 Td (Un robot auto-balanceado se mantiene de pie desplazando sus ruedas. Si el cuerpo se) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 733.5 Td (inclina, la base debe acelerar para que el centro de masa vuelva a una region cercana) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 719.0 Td (a la vertical.) Tj ET
+q 0.450 0.480 0.520 RG 1.2 w 120.0 561.5 m 475.0 561.5 l S Q
+q 0.050 0.060 0.070 rg 272.0 577.5 m 280.8 577.5 288.0 570.3 288.0 561.5 c 288.0 552.7 280.8 545.5 272.0 545.5 c 263.2 545.5 256.0 552.7 256.0 561.5 c 256.0 570.3 263.2 577.5 272.0 577.5 c f Q
+q 0.050 0.060 0.070 rg 328.0 577.5 m 336.8 577.5 344.0 570.3 344.0 561.5 c 344.0 552.7 336.8 545.5 328.0 545.5 c 319.2 545.5 312.0 552.7 312.0 561.5 c 312.0 570.3 319.2 577.5 328.0 577.5 c f Q
+q 0.860 0.160 0.120 RG 8.0 w 300.0 561.5 m 345.0 678.5 l S Q
+q 0.120 0.470 0.700 RG 1.0 w 300.0 561.5 m 300.0 688.5 l S Q
+BT 0.200 0.220 0.250 rg /F2 9.5 Tf 351.0 661.5 Td (cuerpo inclinado) Tj ET
+BT 0.120 0.470 0.700 rg /F3 9.5 Tf 308.0 636.5 Td (theta) Tj ET
+BT 0.350 0.390 0.440 rg /F1 9.5 Tf 120.0 534.5 Td (ruedas / base movil) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 520.5 Td (La variable principal es theta, el angulo del cuerpo respecto a la vertical. El) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 506.0 Td (objetivo del controlador es mantener theta cerca de cero grados, sin exigir) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 491.5 Td (velocidades imposibles a los motores.) Tj ET
+q 0.940 0.960 0.980 rg 0.700 0.750 0.800 RG 1.0 w 54.0 401.0 487.0 80.0 re B Q
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 459.0 Td (theta = angulo de inclinacion del cuerpo) Tj ET
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 444.0 Td (theta_dot = velocidad angular) Tj ET
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 429.0 Td (x = posicion horizontal de la base) Tj ET
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 414.0 Td (x_ddot = aceleracion horizontal ordenada por el controlador) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 385.0 Td (En un modelo simplificado, la gravedad tiende a aumentar la caida del cuerpo, mientras) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 370.5 Td (que la aceleracion horizontal de la base puede compensarla. Esta relacion permite) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 356.0 Td (estudiar control sin depender inicialmente de un modelo SDF complejo.) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 24 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 2575 >>
+stream
+BT 0.080 0.130 0.180 rg /F2 18.0 Tf 54.0 788.0 Td (3. Dinamica simplificada) Tj ET
+q 0.120 0.470 0.700 RG 1.2 w 54.0 772.0 m 541.0 772.0 l S Q
+q 0.720 0.750 0.780 RG 0.6 w 54.0 36.0 m 541.0 36.0 l S Q
+BT 0.350 0.390 0.440 rg /F3 8.5 Tf 54.0 22.0 Td (Robot auto-balanceado 2D - PID vs PID IA) Tj ET
+BT 0.350 0.390 0.440 rg /F1 8.5 Tf 507.0 22.0 Td (Pagina 4) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 748.0 Td (La simulacion 2D usa una aproximacion no lineal sencilla. No pretende representar) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 733.5 Td (todos los fenomenos fisicos, pero conserva la intuicion fundamental: el cuerpo cae por) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 719.0 Td (gravedad y se recupera acelerando la base.) Tj ET
+q 0.940 0.960 0.980 rg 0.700 0.750 0.800 RG 1.0 w 54.0 628.5 487.0 80.0 re B Q
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 686.5 Td (theta_ddot = \(g / L\) * sin\(theta\) - \(x_ddot / L\) * cos\(theta\) - d * theta_dot) Tj ET
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 671.5 Td (g = gravedad) Tj ET
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 656.5 Td (L = altura aproximada del centro de masa) Tj ET
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 641.5 Td (d = amortiguamiento angular) Tj ET
+BT 0.120 0.220 0.310 rg /F2 13.5 Tf 54.0 604.5 Td (Interpretacion) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 586.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 586.5 Td (El termino \(g / L\) * sin\(theta\) representa la tendencia natural a caer.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 572.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 572.5 Td (El termino -\(x_ddot / L\) * cos\(theta\) representa la accion correctiva de las) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 558.5 Td (ruedas.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 544.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 544.5 Td (El amortiguamiento reduce oscilaciones y representa perdidas del sistema.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 530.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 530.5 Td (Si el controlador se satura, el robot puede no tener suficiente aceleracion) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 516.5 Td (para recuperarse.) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 502.5 Td (Este modelo muestra por que el signo de la accion de control es critico. Si las ruedas) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 488.0 Td (aceleran en la direccion incorrecta, el robot ayuda a su propia caida en vez de) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 473.5 Td (corregirla.) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 24 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 10 0 R >>
+endobj
+12 0 obj
+<< /Length 3457 >>
+stream
+BT 0.080 0.130 0.180 rg /F2 18.0 Tf 54.0 788.0 Td (4. Control PID clasico) Tj ET
+q 0.120 0.470 0.700 RG 1.2 w 54.0 772.0 m 541.0 772.0 l S Q
+q 0.720 0.750 0.780 RG 0.6 w 54.0 36.0 m 541.0 36.0 l S Q
+BT 0.350 0.390 0.440 rg /F3 8.5 Tf 54.0 22.0 Td (Robot auto-balanceado 2D - PID vs PID IA) Tj ET
+BT 0.350 0.390 0.440 rg /F1 8.5 Tf 507.0 22.0 Td (Pagina 5) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 748.0 Td (El PID clasico calcula la accion de control usando tres componentes: proporcional,) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 733.5 Td (integral y derivativa. Es una estrategia ampliamente usada porque es simple,) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 719.0 Td (interpretable y efectiva cuando se ajusta correctamente.) Tj ET
+q 0.940 0.960 0.980 rg 0.700 0.750 0.800 RG 1.0 w 54.0 658.5 487.0 50.0 re B Q
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 686.5 Td (u = Kp * error + Ki * integral\(error\) + Kd * derivative\(error\)) Tj ET
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 671.5 Td (error = theta - theta_objetivo) Tj ET
+BT 0.120 0.220 0.310 rg /F2 13.5 Tf 54.0 634.5 Td (Rol de cada ganancia) Tj ET
+q 0.910 0.940 0.960 rg 0.780 0.820 0.860 RG 0.7 w 54.0 594.5 490.0 22.0 re B Q
+BT 0.080 0.130 0.180 rg /F2 8.8 Tf 59.0 601.5 Td (Ganancia) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 124.0 594.5 m 124.0 616.5 l S Q
+BT 0.080 0.130 0.180 rg /F2 8.8 Tf 129.0 601.5 Td (Funcion) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 334.0 594.5 m 334.0 616.5 l S Q
+BT 0.080 0.130 0.180 rg /F2 8.8 Tf 339.0 601.5 Td (Riesgo si es excesiva) Tj ET
+q 1.000 1.000 1.000 rg 0.780 0.820 0.860 RG 0.7 w 54.0 572.5 490.0 22.0 re B Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 59.0 579.5 Td (Kp) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 124.0 572.5 m 124.0 594.5 l S Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 129.0 579.5 Td (Corrige el error actual) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 334.0 572.5 m 334.0 594.5 l S Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 339.0 579.5 Td (Oscilacion o saturacion) Tj ET
+q 1.000 1.000 1.000 rg 0.780 0.820 0.860 RG 0.7 w 54.0 550.5 490.0 22.0 re B Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 59.0 557.5 Td (Ki) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 124.0 550.5 m 124.0 572.5 l S Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 129.0 557.5 Td (Corrige error acumulado) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 334.0 550.5 m 334.0 572.5 l S Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 339.0 557.5 Td (Windup y respuesta lenta) Tj ET
+q 1.000 1.000 1.000 rg 0.780 0.820 0.860 RG 0.7 w 54.0 528.5 490.0 22.0 re B Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 59.0 535.5 Td (Kd) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 124.0 528.5 m 124.0 550.5 l S Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 129.0 535.5 Td (Frena cambios rapidos) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 334.0 528.5 m 334.0 550.5 l S Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 339.0 535.5 Td (Sensibilidad al ruido) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 518.5 Td (En el robot auto-balanceado, el PID no debe buscar solamente que el angulo sea cero.) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 504.0 Td (Tambien debe cuidar que la base no derive indefinidamente hacia adelante o hacia) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 489.5 Td (atras.) Tj ET
+q 0.940 0.960 0.980 rg 0.700 0.750 0.800 RG 1.0 w 54.0 429.0 487.0 50.0 re B Q
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 457.0 Td (theta_objetivo = -\(Kx * x + Kv * x_dot\)) Tj ET
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 442.0 Td (El signo negativo pide inclinarse contra la deriva de posicion.) Tj ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 24 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 12 0 R >>
+endobj
+14 0 obj
+<< /Length 2410 >>
+stream
+BT 0.080 0.130 0.180 rg /F2 18.0 Tf 54.0 788.0 Td (5. PID potenciado por IA) Tj ET
+q 0.120 0.470 0.700 RG 1.2 w 54.0 772.0 m 541.0 772.0 l S Q
+q 0.720 0.750 0.780 RG 0.6 w 54.0 36.0 m 541.0 36.0 l S Q
+BT 0.350 0.390 0.440 rg /F3 8.5 Tf 54.0 22.0 Td (Robot auto-balanceado 2D - PID vs PID IA) Tj ET
+BT 0.350 0.390 0.440 rg /F1 8.5 Tf 507.0 22.0 Td (Pagina 6) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 748.0 Td (El PID potenciado por IA conserva la estructura del PID, pero modifica sus ganancias) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 733.5 Td (segun el estado del robot. En esta practica se usa una mezcla de expertos transparente) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 719.0 Td (y explicable.) Tj ET
+BT 0.120 0.220 0.310 rg /F2 13.5 Tf 54.0 692.5 Td (Expertos usados) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 674.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 674.5 Td (Experto de balance: actua cuando el robot esta cerca de la vertical y necesita) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 660.5 Td (movimientos suaves.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 646.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 646.5 Td (Experto de recuperacion: actua cuando la inclinacion o la velocidad angular) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 632.5 Td (son grandes.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 618.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 618.5 Td (Experto de deriva: actua cuando la base se aleja demasiado de la posicion) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 604.5 Td (inicial.) Tj ET
+q 0.940 0.960 0.980 rg 0.700 0.750 0.800 RG 1.0 w 54.0 533.5 487.0 65.0 re B Q
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 576.5 Td (w_balance + w_recuperacion + w_deriva = 1) Tj ET
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 561.5 Td (Kp_final = w1*Kp_balance + w2*Kp_recuperacion + w3*Kp_deriva) Tj ET
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 546.5 Td (El mismo principio se aplica a Ki y Kd.) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 517.5 Td (Este enfoque es una primera forma de IA porque el controlador cambia su comportamiento) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 503.0 Td (de acuerdo con el contexto. Mas adelante, los pesos podrian aprenderse con redes) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 488.5 Td (neuronales, logica difusa, algoritmos geneticos o aprendizaje por refuerzo.) Tj ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 24 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 14 0 R >>
+endobj
+16 0 obj
+<< /Length 4044 >>
+stream
+BT 0.080 0.130 0.180 rg /F2 18.0 Tf 54.0 788.0 Td (6. Metricas de evaluacion) Tj ET
+q 0.120 0.470 0.700 RG 1.2 w 54.0 772.0 m 541.0 772.0 l S Q
+q 0.720 0.750 0.780 RG 0.6 w 54.0 36.0 m 541.0 36.0 l S Q
+BT 0.350 0.390 0.440 rg /F3 8.5 Tf 54.0 22.0 Td (Robot auto-balanceado 2D - PID vs PID IA) Tj ET
+BT 0.350 0.390 0.440 rg /F1 8.5 Tf 507.0 22.0 Td (Pagina 7) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 748.0 Td (Un controlador no debe evaluarse solamente preguntando si el robot cae o no cae.) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 733.5 Td (Tambien importa cuanto se inclina, cuanto error acumula y cuanto esfuerzo exige a los) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 719.0 Td (motores.) Tj ET
+BT 0.120 0.220 0.310 rg /F2 13.5 Tf 54.0 692.5 Td (Metricas principales) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 674.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 674.5 Td (Inclinacion maxima: mayor valor absoluto del angulo durante la simulacion.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 660.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 660.5 Td (IAE: integral del error absoluto; mide cuanto tiempo pasa lejos de la) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 646.5 Td (vertical.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 632.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 632.5 Td (RPM maxima: esfuerzo equivalente exigido al motor.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 618.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 618.5 Td (Deriva maxima: desplazamiento horizontal acumulado de la base.) Tj ET
+BT 0.120 0.220 0.310 rg /F2 13.5 Tf 54.0 596.5 Td (Resultado de referencia de la simulacion actual) Tj ET
+q 0.910 0.940 0.960 rg 0.780 0.820 0.860 RG 0.7 w 54.0 556.5 485.0 22.0 re B Q
+BT 0.080 0.130 0.180 rg /F2 8.8 Tf 59.0 563.5 Td (Controlador) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 159.0 556.5 m 159.0 578.5 l S Q
+BT 0.080 0.130 0.180 rg /F2 8.8 Tf 164.0 563.5 Td (Max tilt) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 254.0 556.5 m 254.0 578.5 l S Q
+BT 0.080 0.130 0.180 rg /F2 8.8 Tf 259.0 563.5 Td (IAE) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 349.0 556.5 m 349.0 578.5 l S Q
+BT 0.080 0.130 0.180 rg /F2 8.8 Tf 354.0 563.5 Td (Max x) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 444.0 556.5 m 444.0 578.5 l S Q
+BT 0.080 0.130 0.180 rg /F2 8.8 Tf 449.0 563.5 Td (Max RPM) Tj ET
+q 1.000 1.000 1.000 rg 0.780 0.820 0.860 RG 0.7 w 54.0 534.5 485.0 22.0 re B Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 59.0 541.5 Td (PID normal) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 159.0 534.5 m 159.0 556.5 l S Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 164.0 541.5 Td (15.95 deg) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 254.0 534.5 m 254.0 556.5 l S Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 259.0 541.5 Td (1.5019) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 349.0 534.5 m 349.0 556.5 l S Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 354.0 541.5 Td (0.166 m) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 444.0 534.5 m 444.0 556.5 l S Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 449.0 541.5 Td (100.9) Tj ET
+q 1.000 1.000 1.000 rg 0.780 0.820 0.860 RG 0.7 w 54.0 512.5 485.0 22.0 re B Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 59.0 519.5 Td (PID IA) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 159.0 512.5 m 159.0 534.5 l S Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 164.0 519.5 Td (14.64 deg) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 254.0 512.5 m 254.0 534.5 l S Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 259.0 519.5 Td (1.3478) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 349.0 512.5 m 349.0 534.5 l S Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 354.0 519.5 Td (0.225 m) Tj ET
+q 0.780 0.820 0.860 RG 0.5 w 444.0 512.5 m 444.0 534.5 l S Q
+BT 0.080 0.130 0.180 rg /F1 8.8 Tf 449.0 519.5 Td (133.3) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 502.5 Td (En esta corrida, el PID IA reduce la inclinacion maxima y el error acumulado, pero) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 488.0 Td (solicita mayor esfuerzo de motor. Esta es una conclusion importante: mejorar) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 473.5 Td (estabilidad puede tener costo energetico o de actuacion.) Tj ET
+endstream
+endobj
+17 0 obj
+<< /Type /Page /Parent 24 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 16 0 R >>
+endobj
+18 0 obj
+<< /Length 2708 >>
+stream
+BT 0.080 0.130 0.180 rg /F2 18.0 Tf 54.0 788.0 Td (7. Interpretacion educativa) Tj ET
+q 0.120 0.470 0.700 RG 1.2 w 54.0 772.0 m 541.0 772.0 l S Q
+q 0.720 0.750 0.780 RG 0.6 w 54.0 36.0 m 541.0 36.0 l S Q
+BT 0.350 0.390 0.440 rg /F3 8.5 Tf 54.0 22.0 Td (Robot auto-balanceado 2D - PID vs PID IA) Tj ET
+BT 0.350 0.390 0.440 rg /F1 8.5 Tf 507.0 22.0 Td (Pagina 8) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 748.0 Td (La mejora del PID IA debe observarse en tres niveles: la curva de inclinacion, las) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 733.5 Td (metricas numericas y la animacion del cuerpo. Si visualmente ambos robots parecen) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 719.0 Td (parecidos, el error acumulado ayuda a cuantificar la diferencia.) Tj ET
+BT 0.120 0.220 0.310 rg /F2 13.5 Tf 54.0 692.5 Td (Como defender la mejora) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 674.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 674.5 Td (Menor pico de inclinacion significa que el robot se aleja menos de la) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 660.5 Td (vertical.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 646.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 646.5 Td (Menor IAE significa que durante toda la prueba se mantuvo mas cerca del) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 632.5 Td (objetivo.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 618.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 618.5 Td (Mayor RPM maxima indica que la mejora no fue gratuita; exigio mas actuacion.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 604.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 604.5 Td (Un buen controlador debe equilibrar estabilidad, energia y limites fisicos del) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 590.5 Td (motor.) Tj ET
+BT 0.120 0.220 0.310 rg /F2 13.5 Tf 54.0 568.5 Td (Limitaciones del modelo 2D) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 550.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 550.5 Td (No incluye geometria 3D completa ni colisiones complejas.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 536.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 536.5 Td (No representa con precision todos los efectos de friccion rueda-suelo.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 522.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 522.5 Td (No modela saturacion electrica, retardo real del motor ni ruido completo del) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 508.5 Td (sensor.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 494.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 494.5 Td (Sirve como banco de pruebas conceptual antes de Gazebo.) Tj ET
+endstream
+endobj
+19 0 obj
+<< /Type /Page /Parent 24 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 18 0 R >>
+endobj
+20 0 obj
+<< /Length 2077 >>
+stream
+BT 0.080 0.130 0.180 rg /F2 18.0 Tf 54.0 788.0 Td (8. Conexion con Gazebo y robot fisico) Tj ET
+q 0.120 0.470 0.700 RG 1.2 w 54.0 772.0 m 541.0 772.0 l S Q
+q 0.720 0.750 0.780 RG 0.6 w 54.0 36.0 m 541.0 36.0 l S Q
+BT 0.350 0.390 0.440 rg /F3 8.5 Tf 54.0 22.0 Td (Robot auto-balanceado 2D - PID vs PID IA) Tj ET
+BT 0.350 0.390 0.440 rg /F1 8.5 Tf 507.0 22.0 Td (Pagina 9) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 748.0 Td (Una vez que una estrategia funciona en 2D, el siguiente paso es probarla en Gazebo.) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 733.5 Td (Alli aparecen problemas que el modelo 2D no incluye: posicion real de los joints,) Tj ET
+BT 0.120 0.150 0.180 rg /F1 10.7 Tf 54.0 719.0 Td (centro de masa, contacto de ruedas, friccion y orientacion de la IMU.) Tj ET
+q 0.940 0.960 0.980 rg 0.700 0.750 0.800 RG 1.0 w 54.0 643.5 487.0 65.0 re B Q
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 686.5 Td (2D: valida la idea de control) Tj ET
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 671.5 Td (Gazebo: valida geometria, sensores y contacto) Tj ET
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 656.5 Td (Robot fisico: valida actuadores, bateria, latencia y seguridad) Tj ET
+BT 0.120 0.220 0.310 rg /F2 13.5 Tf 54.0 619.5 Td (Recomendaciones de seguridad) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 601.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 601.5 Td (Limitar RPM y aceleracion antes de probar en hardware real.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 587.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 587.5 Td (Agregar interruptor de emergencia o forma rapida de detener motores.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 573.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 573.5 Td (Probar primero con inclinaciones pequenas y superficies despejadas.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 559.5 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 559.5 Td (Registrar datos de IMU, comandos y velocidad de ruedas para comparar con) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 545.5 Td (simulacion.) Tj ET
+endstream
+endobj
+21 0 obj
+<< /Type /Page /Parent 24 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 20 0 R >>
+endobj
+22 0 obj
+<< /Length 2772 >>
+stream
+BT 0.080 0.130 0.180 rg /F2 18.0 Tf 54.0 788.0 Td (9. Actividades y preguntas) Tj ET
+q 0.120 0.470 0.700 RG 1.2 w 54.0 772.0 m 541.0 772.0 l S Q
+q 0.720 0.750 0.780 RG 0.6 w 54.0 36.0 m 541.0 36.0 l S Q
+BT 0.350 0.390 0.440 rg /F3 8.5 Tf 54.0 22.0 Td (Robot auto-balanceado 2D - PID vs PID IA) Tj ET
+BT 0.350 0.390 0.440 rg /F1 8.5 Tf 507.0 22.0 Td (Pagina 10) Tj ET
+BT 0.120 0.220 0.310 rg /F2 13.5 Tf 54.0 740.0 Td (Actividades sugeridas) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 722.0 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 722.0 Td (Ejecutar la simulacion con inclinacion inicial de 3, 10 y 15 grados; comparar) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 708.0 Td (metricas.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 694.0 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 694.0 Td (Aumentar la perturbacion externa y observar cuando se activa el experto de) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 680.0 Td (recuperacion.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 666.0 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 666.0 Td (Modificar Kp, Ki y Kd del PID normal y analizar oscilaciones o saturacion.) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 652.0 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 652.0 Td (Comparar la animacion con las graficas para conectar movimiento y datos.) Tj ET
+BT 0.120 0.220 0.310 rg /F2 13.5 Tf 54.0 630.0 Td (Preguntas de reflexion) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 612.0 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 612.0 Td (Por que el robot auto-balanceado se parece a un pendulo invertido?) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 598.0 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 598.0 Td (Que ocurre si el signo del controlador esta invertido?) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 584.0 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 584.0 Td (Por que un PID IA puede ser mejor en error pero peor en esfuerzo de motor?) Tj ET
+BT 0.000 0.000 0.000 rg /F2 10.5 Tf 61.0 570.0 Td (-) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 570.0 Td (Que metricas faltarian para decidir si el controlador es seguro en hardware) Tj ET
+BT 0.000 0.000 0.000 rg /F1 10.5 Tf 76.0 556.0 Td (real?) Tj ET
+BT 0.120 0.220 0.310 rg /F2 13.5 Tf 54.0 534.0 Td (Archivos relacionados) Tj ET
+q 0.940 0.960 0.980 rg 0.700 0.750 0.800 RG 1.0 w 54.0 444.0 487.0 80.0 re B Q
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 502.0 Td (scripts/sim_2d_pid_ai.py) Tj ET
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 487.0 Td (scripts/create_2d_compendium.py) Tj ET
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 472.0 Td (data/sim_2d/guia_compendio_pid_ia_2d.html) Tj ET
+BT 0.050 0.120 0.180 rg /F1 10.5 Tf 68.0 457.0 Td (data/sim_2d/pid_vs_pid_ai_2d.csv) Tj ET
+endstream
+endobj
+23 0 obj
+<< /Type /Page /Parent 24 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 22 0 R >>
+endobj
+24 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R] /Count 10 >>
+endobj
+25 0 obj
+<< /Type /Catalog /Pages 24 0 R >>
+endobj
+xref
+0 26
+0000000000 65535 f 
+0000000015 00000 n 
+0000000085 00000 n 
+0000000160 00000 n 
+0000000238 00000 n 
+0000001083 00000 n 
+0000001230 00000 n 
+0000004105 00000 n 
+0000004252 00000 n 
+0000007078 00000 n 
+0000007225 00000 n 
+0000009853 00000 n 
+0000010002 00000 n 
+0000013512 00000 n 
+0000013661 00000 n 
+0000016124 00000 n 
+0000016273 00000 n 
+0000020370 00000 n 
+0000020519 00000 n 
+0000023280 00000 n 
+0000023429 00000 n 
+0000025559 00000 n 
+0000025708 00000 n 
+0000028533 00000 n 
+0000028682 00000 n 
+0000028802 00000 n 
+trailer
+<< /Size 26 /Root 25 0 R >>
+startxref
+28853
+%%EOF

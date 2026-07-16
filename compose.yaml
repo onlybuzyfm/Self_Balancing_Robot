@@ -1,0 +1,33 @@
+services:
+  sim:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tumbller-gazebo:jazzy
+    container_name: tumbller_gazebo
+    working_dir: /workspaces/tumbller_ws
+    environment:
+      ROS_DOMAIN_ID: "42"
+      RMW_IMPLEMENTATION: "rmw_fastrtps_cpp"
+      LIBGL_ALWAYS_SOFTWARE: "1"
+      QT_X11_NO_MITSHM: "1"
+    volumes:
+      - .:/workspaces/tumbller_ws/src/tumbller_gazebo
+    command: ["ros2", "launch", "tumbller_gazebo", "sim_pid_headless.launch.py"]
+    stdin_open: true
+    tty: true
+
+  moe:
+    image: tumbller-gazebo:jazzy
+    container_name: tumbller_gazebo_moe
+    working_dir: /workspaces/tumbller_ws
+    environment:
+      ROS_DOMAIN_ID: "42"
+      RMW_IMPLEMENTATION: "rmw_fastrtps_cpp"
+      LIBGL_ALWAYS_SOFTWARE: "1"
+      QT_X11_NO_MITSHM: "1"
+    volumes:
+      - .:/workspaces/tumbller_ws/src/tumbller_gazebo
+    command: ["ros2", "launch", "tumbller_gazebo", "sim_headless.launch.py"]
+    stdin_open: true
+    tty: true

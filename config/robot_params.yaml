@@ -1,0 +1,27 @@
+moe_balance_controller:
+  ros__parameters:
+    # Initial estimates. Replace with measured values when the real robot arrives.
+    wheel_radius_m: 0.034
+    wheel_separation_m: 0.132
+    chassis_mass_kg: 0.62
+    wheel_mass_kg: 0.055
+    center_of_mass_height_m: 0.115
+
+    control_rate_hz: 100.0
+    max_wheel_speed_rad_s: 18.0
+    max_tilt_rad: 1.25
+    deadband_rad: 0.015
+    command_sign: -1.0
+
+    balance_kp: 34.0
+    balance_kd: 1.25
+    balance_ki: 0.0
+    recovery_kp: 54.0
+    recovery_kd: 1.8
+    recovery_ki: 0.0
+    damping_kp: 18.0
+    damping_kd: 2.5
+    damping_ki: 0.0
+
+    recovery_tilt_rad: 0.22
+    damping_rate_rad_s: 1.8

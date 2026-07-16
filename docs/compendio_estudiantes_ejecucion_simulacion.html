@@ -1,0 +1,238 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Compendio para estudiantes - Simulacion robot auto-balanceado</title>
+  <style>
+    body { margin: 0; background: #f4f6f8; color: #17202a; font-family: Arial, Helvetica, sans-serif; }
+    main { max-width: 920px; margin: 0 auto; background: #fff; min-height: 100vh; padding: 34px 42px 56px; border-left: 1px solid #d9dde3; border-right: 1px solid #d9dde3; }
+    h1 { font-size: 30px; margin: 0 0 18px; }
+    h2 { margin-top: 30px; padding-top: 12px; border-top: 1px solid #d9dde3; font-size: 22px; }
+    h3 { margin-top: 22px; font-size: 17px; }
+    p, li { line-height: 1.55; }
+    pre { background: #eef2f5; border: 1px solid #d3d9e1; border-radius: 7px; padding: 12px; overflow-x: auto; }
+    code { font-family: Consolas, monospace; }
+    ul { padding-left: 24px; }
+  </style>
+</head>
+<body>
+<main>
+<h1>Compendio para estudiantes: ejecucion de la simulacion del robot auto-balanceado</h1>
+<h2>1. Proposito</h2>
+<p>Este documento explica como ejecutar las simulaciones del proyecto del robot auto-balanceado de dos ruedas. El objetivo es que cada estudiante pueda correr el modelo 2D, analizar el comportamiento del PID normal y del PID potenciado por IA, abrir las graficas, revisar el compendio interactivo y, si tiene Docker configurado, probar tambien la simulacion en Gazebo.</p>
+<h2>2. Que contiene el proyecto</h2>
+<p>El proyecto incluye:</p>
+<ul>
+<li>Simulacion 2D del robot como pendulo invertido.</li>
+<li>Comparacion entre PID normal y PID potenciado por IA.</li>
+<li>Archivo CSV con datos de la simulacion.</li>
+<li>Graficas HTML.</li>
+<li>Animacion interactiva.</li>
+<li>Compendio HTML con guia, graficas y animacion.</li>
+<li>PDF teorico.</li>
+<li>Simulacion Gazebo/ROS 2 mediante Docker.</li>
+</ul>
+<h2>3. Requisitos minimos</h2>
+<p>Para la simulacion 2D:</p>
+<ul>
+<li>Windows, Linux o macOS.</li>
+<li>Python 3 instalado.</li>
+<li>Navegador web.</li>
+</ul>
+<p>Para Gazebo/ROS 2:</p>
+<ul>
+<li>Docker Desktop instalado.</li>
+<li>En Windows, Docker Desktop con backend WSL2.</li>
+<li>Suficiente memoria disponible para correr Gazebo.</li>
+</ul>
+<p>La simulacion 2D no necesita ROS, Gazebo ni Docker.</p>
+<h2>4. Ubicacion del proyecto</h2>
+<p>En la computadora de trabajo, el proyecto se encuentra en:</p>
+<pre><code>
+D:\PercetptIA\Self_Balancing_Robot
+</code></pre>
+<p>Si el estudiante tiene el proyecto en otra carpeta, debe entrar a su propia ruta.</p>
+<p>Ejemplo en PowerShell:</p>
+<pre><code>
+cd D:\PercetptIA\Self_Balancing_Robot
+</code></pre>
+<h2>5. Ejecutar la simulacion 2D</h2>
+<p>Desde la carpeta raiz del proyecto:</p>
+<pre><code>
+python scripts\sim_2d_pid_ai.py
+</code></pre>
+<p>Este comando genera:</p>
+<pre><code>
+data\sim_2d\pid_vs_pid_ai_2d.csv
+data\sim_2d\pid_vs_pid_ai_2d.html
+</code></pre>
+<p>El CSV contiene los datos numericos. El HTML contiene graficas del comportamiento del robot.</p>
+<h2>6. Abrir el compendio interactivo recomendado</h2>
+<p>La version recomendada para clase es el compendio en un solo HTML:</p>
+<pre><code>
+data\sim_2d\guia_compendio_pid_ia_2d.html
+</code></pre>
+<p>Para regenerarlo despues de ejecutar la simulacion:</p>
+<pre><code>
+python scripts\create_2d_compendium.py
+</code></pre>
+<p>Luego abrir el archivo HTML en el navegador.</p>
+<p>Este compendio incluye:</p>
+<ul>
+<li>Explicacion del modelo 2D.</li>
+<li>PID normal.</li>
+<li>PID potenciado por IA.</li>
+<li>Tabla de resultados.</li>
+<li>Animacion interactiva.</li>
+<li>Graficas principales.</li>
+<li>Actividades para estudiantes.</li>
+</ul>
+<h2>7. Generar solo la animacion</h2>
+<p>Si se desea generar unicamente la animacion:</p>
+<pre><code>
+python scripts\create_2d_animation.py
+</code></pre>
+<p>Archivo generado:</p>
+<pre><code>
+data\sim_2d\pid_vs_pid_ai_2d_animation.html
+</code></pre>
+<p>La animacion muestra lado a lado:</p>
+<ul>
+<li>PID normal.</li>
+<li>PID potenciado por IA.</li>
+<li>Inclinacion del robot.</li>
+<li>Posicion horizontal.</li>
+<li>RPM aproximadas.</li>
+<li>Ganancia Kp.</li>
+<li>Peso del experto de recuperacion.</li>
+</ul>
+<h2>8. Generar el PDF teorico</h2>
+<p>Para crear el PDF teorico:</p>
+<pre><code>
+python scripts\create_theoretical_pdf.py
+</code></pre>
+<p>Archivo generado:</p>
+<pre><code>
+docs\informe_teorico_pid_ia_robot_auto_balanceado.pdf
+</code></pre>
+<p>El PDF contiene fundamentos teoricos sobre:</p>
+<ul>
+<li>Pendulo invertido.</li>
+<li>Dinamica simplificada.</li>
+<li>PID clasico.</li>
+<li>PID potenciado por IA.</li>
+<li>Mezcla de expertos.</li>
+<li>Metricas de comparacion.</li>
+<li>Conexion con Gazebo y robot fisico.</li>
+</ul>
+<h2>9. Ejecutar escenarios personalizados</h2>
+<p>Se puede cambiar la inclinacion inicial:</p>
+<pre><code>
+python scripts\sim_2d_pid_ai.py --initial-tilt-deg 10
+python scripts\create_2d_compendium.py
+</code></pre>
+<p>Se puede cambiar la perturbacion externa:</p>
+<pre><code>
+python scripts\sim_2d_pid_ai.py --impulse-accel -5.0
+python scripts\create_2d_compendium.py
+</code></pre>
+<p>Se puede cambiar la duracion de la simulacion:</p>
+<pre><code>
+python scripts\sim_2d_pid_ai.py --duration 15
+python scripts\create_2d_compendium.py
+</code></pre>
+<h2>10. Interpretacion basica de resultados</h2>
+<p>Al abrir el compendio HTML, observar tres aspectos:</p>
+<p>1. **Inclinacion maxima**</p>
+<p>   Indica cuanto se aleja el robot de la vertical. Menor valor significa mejor estabilidad.</p>
+<p>2. **Error acumulado**</p>
+<p>   Indica cuanto tiempo pasa el robot lejos del angulo objetivo. Menor valor significa mejor control global.</p>
+<p>3. **RPM maxima**</p>
+<p>   Indica el esfuerzo solicitado al motor. Una mejora en estabilidad puede requerir mas RPM.</p>
+<p>La conclusion esperada es que el PID potenciado por IA puede reducir la inclinacion y el error acumulado, pero usando mayor esfuerzo de motor.</p>
+<h2>11. Ejecutar Gazebo con Docker</h2>
+<p>Primero verificar que Docker Desktop este abierto y funcionando.</p>
+<p>Construir la imagen:</p>
+<pre><code>
+docker compose build
+</code></pre>
+<p>Ejecutar simulacion headless:</p>
+<pre><code>
+docker compose up sim
+</code></pre>
+<p>Ejecutar una terminal dentro del contenedor:</p>
+<pre><code>
+docker compose run --rm sim bash
+</code></pre>
+<p>Dentro del contenedor se pueden consultar topics de ROS 2:</p>
+<pre><code>
+ros2 topic list
+</code></pre>
+<h2>12. Gazebo grafico</h2>
+<p>Para abrir Gazebo con interfaz grafica, lo mas recomendable en Windows es usar WSL2 con soporte grafico.</p>
+<p>Desde Linux/WSL2:</p>
+<pre><code>
+./docker/run-gui-linux.sh
+</code></pre>
+<p>Si la computadora no tiene configuracion grafica correcta, usar primero la simulacion 2D y el modo headless.</p>
+<h2>13. Errores comunes</h2>
+<h3>Error: Docker no conecta</h3>
+<p>Mensaje posible:</p>
+<pre><code>
+error during connect: dockerDesktopLinuxEngine
+</code></pre>
+<p>Solucion:</p>
+<ul>
+<li>Abrir Docker Desktop.</li>
+<li>Esperar a que el motor este iniciado.</li>
+<li>Revisar que WSL2 este habilitado.</li>
+<li>Volver a ejecutar el comando.</li>
+</ul>
+<h3>Error: python no se reconoce</h3>
+<p>Solucion:</p>
+<ul>
+<li>Instalar Python 3.</li>
+<li>Marcar la opcion “Add Python to PATH”.</li>
+<li>Cerrar y abrir PowerShell nuevamente.</li>
+</ul>
+<h3>No se abre el HTML</h3>
+<p>Solucion:</p>
+<ul>
+<li>Ir a la carpeta `data\sim_2d`.</li>
+<li>Doble clic sobre el archivo `.html`.</li>
+<li>Tambien puede abrirse desde el navegador con `Ctrl + O`.</li>
+</ul>
+<h3>La simulacion parece no cambiar</h3>
+<p>Solucion:</p>
+<ul>
+<li>Ejecutar de nuevo `python scripts\sim_2d_pid_ai.py`.</li>
+<li>Regenerar el compendio con `python scripts\create_2d_compendium.py`.</li>
+<li>Refrescar el navegador con `Ctrl + R`.</li>
+</ul>
+<h2>14. Actividad para entregar</h2>
+<p>Cada estudiante debe entregar:</p>
+<p>1. Captura del compendio HTML abierto.</p>
+<p>2. Una tabla comparando PID normal y PID IA.</p>
+<p>3. Respuesta breve a estas preguntas:</p>
+<p>   - Cual controlador tuvo menor inclinacion maxima?</p>
+<p>   - Cual tuvo menor error acumulado?</p>
+<p>   - Cual uso mas RPM?</p>
+<p>   - La mejora del PID IA fue gratuita o tuvo un costo?</p>
+<p>   - Que podria pasar al llevar este control a Gazebo o al robot fisico?</p>
+<h2>15. Comandos rapidos</h2>
+<p>Ejecutar todo lo principal:</p>
+<pre><code>
+cd D:\PercetptIA\Self_Balancing_Robot
+python scripts\sim_2d_pid_ai.py
+python scripts\create_2d_compendium.py
+python scripts\create_theoretical_pdf.py
+</code></pre>
+<p>Abrir archivos principales:</p>
+<pre><code>
+data\sim_2d\guia_compendio_pid_ia_2d.html
+docs\informe_teorico_pid_ia_robot_auto_balanceado.pdf
+</code></pre>
+</main>
+</body>
+</html>

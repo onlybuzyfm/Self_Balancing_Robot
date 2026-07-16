@@ -1,0 +1,6 @@
+balance_csv_logger:
+  ros__parameters:
+    output_dir: /workspaces/tumbller_ws/src/tumbller_gazebo/data/logs
+    filename_prefix: balance_run
+    sample_rate_hz: 50.0
+    flush_every_rows: 10

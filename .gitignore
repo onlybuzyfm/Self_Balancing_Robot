@@ -1,0 +1,23 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+
+# ROS / colcon build outputs
+build/
+install/
+log/
+
+# Local simulation logs and generated diagnostic plots
+data/logs/*.csv
+data/plots/*.png
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Docker/runtime leftovers
+*.log

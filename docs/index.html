@@ -1,0 +1,32 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Robot Auto-Balanceado - PID vs PID IA</title>
+  <style>
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f4f6f8; color: #17202a; }
+    main { max-width: 900px; margin: 0 auto; padding: 42px 28px 56px; }
+    h1 { font-size: 34px; margin: 0 0 12px; }
+    p { line-height: 1.55; color: #465463; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 24px; }
+    a.card { display: block; background: #fff; border: 1px solid #d8dee6; border-radius: 8px; padding: 18px; color: inherit; text-decoration: none; }
+    a.card:hover { border-color: #1f77b4; box-shadow: 0 6px 20px rgba(31, 119, 180, 0.12); }
+    .card strong { display: block; font-size: 18px; margin-bottom: 8px; }
+    code { background: #e9edf2; border-radius: 4px; padding: 2px 5px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Robot Auto-Balanceado: PID vs PID potenciado por IA</h1>
+  <p>Material educativo para ejecutar una simulacion 2D de un robot auto-balanceado, comparar un PID clasico contra un PID con mezcla de expertos, revisar graficas, animacion y fundamentos teoricos.</p>
+  <div class="grid">
+    <a class="card" href="compendio_estudiantes_ejecucion_simulacion.html"><strong>Guia para estudiantes</strong><span>Requisitos, comandos de ejecucion, errores comunes y actividad de entrega.</span></a>
+    <a class="card" href="../data/sim_2d/guia_compendio_pid_ia_2d.html"><strong>Compendio interactivo</strong><span>Guia, metricas, graficas y animacion en un solo HTML.</span></a>
+    <a class="card" href="informe_teorico_pid_ia_robot_auto_balanceado.pdf"><strong>PDF teorico</strong><span>Modelo de pendulo invertido, PID, PID IA y conexion con Gazebo.</span></a>
+    <a class="card" href="../data/sim_2d/pid_vs_pid_ai_2d_animation.html"><strong>Animacion</strong><span>Visualizacion lado a lado del PID normal y PID potenciado por IA.</span></a>
+  </div>
+  <p>Codigo fuente y comandos en el repositorio. Para ejecutar localmente: <code>python scripts/sim_2d_pid_ai.py</code>.</p>
+</main>
+</body>
+</html>
