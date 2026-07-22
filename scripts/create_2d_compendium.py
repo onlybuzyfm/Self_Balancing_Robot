@@ -27,6 +27,7 @@ section { margin: 0 0 24px; }
 h2 { margin: 0 0 12px; font-size: 22px; }
 h3 { margin: 18px 0 8px; font-size: 17px; }
 p, li { line-height: 1.5; }
+.text-note { margin: -4px 0 8px; color: #536171; font-size: 13px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
 .metric { background: #fff; border: 1px solid #d7dde5; border-radius: 8px; padding: 14px; }
 .metric strong { color: #536171; display: block; font-size: 13px; margin-bottom: 6px; }
@@ -81,6 +82,7 @@ def load_csv(path: Path) -> dict[str, list[dict[str, float]]]:
                     "tiltDeg": float(row["tilt_deg"]),
                     "rateDeg": float(row["tilt_rate_deg_s"]),
                     "x": float(row["x_m"]),
+                    "abs_x": abs(float(row["x_m"])),
                     "v": float(row["x_dot_m_s"]),
                     "accel": float(row["command_accel_m_s2"]),
                     "rpm": float(row["command_motor_rpm"]),
@@ -121,14 +123,22 @@ def summarize(rows: list[dict[str, float]]) -> dict[str, float | None]:
         if max(abs_tilts[idx : idx + window]) <= 1.0:
             settling = rows[idx]["t"]
             break
-    return {"max_tilt": max_tilt, "max_rpm": max_rpm, "max_x": max_x, "iae": iae, "ise": ise, "settling": settling}
+    final_abs_x = abs(rows[-1]["x"])
+    return {"max_tilt": max_tilt, "max_rpm": max_rpm, "max_x": max_x, "final_abs_x": final_abs_x, "iae": iae, "ise": ise, "settling": settling}
 
 
 def pct(base: float, value: float) -> float:
     return 0.0 if base == 0 else (base - value) / base * 100.0
 
 
-def chart_svg(title: str, data: dict[str, list[dict[str, float]]], key: str, unit: str) -> str:
+def chart_svg(
+    title: str,
+    data: dict[str, list[dict[str, float]]],
+    key: str,
+    unit: str,
+    impulse_time: float = 4.0,
+    note: str | None = None,
+) -> str:
     colors = {"PID normal": "#1f77b4", "PID IA": "#d62728"}
     all_rows = [row for rows in data.values() for row in rows]
     x_max = max(row["t"] for row in all_rows)
@@ -141,27 +151,46 @@ def chart_svg(title: str, data: dict[str, list[dict[str, float]]], key: str, uni
     pad = max((y_max - y_min) * 0.08, 0.1)
     y_min -= pad
     y_max += pad
-    left, top, width, height = 64, 28, 830, 235
+    left, top, width, height = 64, 34, 830, 230
 
-    def point(row: dict[str, float]) -> str:
+    def xy(row: dict[str, float]) -> tuple[float, float]:
         x = left + width * row["t"] / x_max
         y = top + height * (1 - (row[key] - y_min) / (y_max - y_min))
+        return x, y
+
+    def point(row: dict[str, float]) -> str:
+        x, y = xy(row)
         return f"{x:.2f},{y:.2f}"
 
     lines = []
+    final_labels = []
     for name in ("PID normal", "PID IA"):
         pts = " ".join(point(r) for r in data[name])
+        final_x, final_y = xy(data[name][-1])
+        final_value = data[name][-1][key]
+        label_y = max(top + 12, min(top + height - 8, final_y))
+        label = f"{name}: {final_value:.2f}{(' ' + unit) if unit else ''}"
         lines.append(f'<polyline points="{pts}" fill="none" stroke="{colors[name]}" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round" />')
+        final_labels.append(f'<circle cx="{final_x:.2f}" cy="{final_y:.2f}" r="3.5" fill="{colors[name]}" />')
+        final_labels.append(f'<text x="{min(final_x + 8, left + width - 145):.2f}" y="{label_y:.2f}" font-size="11" fill="{colors[name]}">{html.escape(label)}</text>')
     zero = ""
     if y_min < 0 < y_max:
         zy = top + height * (1 - (0 - y_min) / (y_max - y_min))
         zero = f'<line x1="{left}" y1="{zy:.2f}" x2="{left + width}" y2="{zy:.2f}" stroke="#8a8f98" stroke-dasharray="5 5" />'
+    impulse_x = left + width * min(max(impulse_time, 0.0), x_max) / x_max
+    impulse = (
+        f'<line x1="{impulse_x:.2f}" y1="{top}" x2="{impulse_x:.2f}" y2="{top + height}" stroke="#8f5b00" stroke-width="1.6" stroke-dasharray="7 5" />'
+        f'<text x="{min(impulse_x + 6, left + width - 115):.2f}" y="{top + 14}" font-size="11" fill="#8f5b00">perturbacion t={impulse_time:.1f}s</text>'
+    )
+    note_html = f'<p class="text-note">{html.escape(note)}</p>' if note else ""
     return f"""
 <div class="chart">
   <h3>{html.escape(title)}</h3>
-  <svg viewBox="0 0 930 310" role="img" aria-label="{html.escape(title)}">
+  {note_html}
+  <svg viewBox="0 0 930 310" role="img" aria-label="{html.escape(title)} con perturbacion marcada">
     <rect x="{left}" y="{top}" width="{width}" height="{height}" fill="#ffffff" stroke="#d7dde5" />
     {zero}
+    {impulse}
     <line x1="{left}" x2="{left + width}" y1="{top + height}" y2="{top + height}" stroke="#4b5563" />
     <line x1="{left}" x2="{left}" y1="{top}" y2="{top + height}" stroke="#4b5563" />
     <text x="{left}" y="292" font-size="12">0 s</text>
@@ -169,6 +198,7 @@ def chart_svg(title: str, data: dict[str, list[dict[str, float]]], key: str, uni
     <text x="8" y="36" font-size="12">{y_max:.2f} {html.escape(unit)}</text>
     <text x="8" y="264" font-size="12">{y_min:.2f} {html.escape(unit)}</text>
     {''.join(lines)}
+    {''.join(final_labels)}
   </svg>
 </div>
 """
@@ -180,13 +210,15 @@ def build_html(data: dict[str, list[dict[str, float]]], anim_data: dict[str, lis
     peak_gain = pct(float(normal["max_tilt"]), float(ai["max_tilt"]))
     iae_gain = pct(float(normal["iae"]), float(ai["iae"]))
     rpm_cost = 0.0 if normal["max_rpm"] == 0 else (float(ai["max_rpm"]) - float(normal["max_rpm"])) / float(normal["max_rpm"]) * 100.0
+    final_drift_gain = pct(float(normal["final_abs_x"]), float(ai["final_abs_x"]))
     charts = "".join(
         [
-            chart_svg("Inclinacion del cuerpo", data, "tiltDeg", "deg"),
-            chart_svg("Comando equivalente de motor", data, "rpm", "rpm"),
-            chart_svg("Deriva horizontal", data, "x", "m"),
-            chart_svg("Ganancia Kp usada", data, "kp", ""),
-            chart_svg("Peso del experto de recuperacion", data, "recovery", ""),
+            chart_svg("Inclinacion del cuerpo", data, "tiltDeg", "deg", note="La linea vertical marca el golpe externo; despues se compara que controlador vuelve mas cerca de cero."),
+            chart_svg("Comando equivalente de motor", data, "rpm", "rpm", note="Aqui se ve el costo de la mejora: el PID IA puede pedir mas motor para corregir antes."),
+            chart_svg("Deriva horizontal", data, "x", "m", note="La curva muestra hacia donde se desplaza la base; el valor final permite ver si la deriva baja."),
+            chart_svg("Magnitud de deriva |x|", data, "abs_x", "m", note="Esta grafica elimina el signo y muestra si la distancia al origen va bajando despues de la perturbacion."),
+            chart_svg("Ganancia Kp usada", data, "kp", "", note="En el PID IA, Kp cambia porque la mezcla de expertos ajusta la agresividad del controlador."),
+            chart_svg("Peso del experto de recuperacion", data, "recovery", "", note="Despues de la perturbacion deberia subir cuando el controlador detecta mayor riesgo de caida."),
         ]
     )
     js_data = json.dumps(anim_data, separators=(",", ":"))
@@ -253,14 +285,15 @@ def build_html(data: dict[str, list[dict[str, float]]], anim_data: dict[str, lis
       <article class="metric good"><strong>Mejora visible 1</strong><b>{peak_gain:.1f}% menos pico</b><small>El PID IA alcanza menor inclinacion maxima: {ai['max_tilt']:.2f} deg vs {normal['max_tilt']:.2f} deg.</small></article>
       <article class="metric good"><strong>Mejora visible 2</strong><b>{iae_gain:.1f}% menos error</b><small>El error absoluto integrado baja de {normal['iae']:.4f} a {ai['iae']:.4f}.</small></article>
       <article class="metric tradeoff"><strong>Costo de la mejora</strong><b>{rpm_cost:+.1f}% RPM max</b><small>El PID IA usa mas esfuerzo: {ai['max_rpm']:.1f} rpm vs {normal['max_rpm']:.1f} rpm.</small></article>
+      <article class="metric good"><strong>Deriva final</strong><b>{final_drift_gain:.1f}% menos |x| final</b><small>Al final queda mas cerca del origen: {ai['final_abs_x']:.3f} m vs {normal['final_abs_x']:.3f} m.</small></article>
     </div>
     <div class="panel" style="margin-top:12px;">
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Controlador</th><th>Max tilt</th><th>IAE</th><th>Max x</th><th>Max RPM</th><th>Interpretacion</th></tr></thead>
+          <thead><tr><th>Controlador</th><th>Max tilt</th><th>IAE</th><th>Max x</th><th>|x| final</th><th>Max RPM</th><th>Interpretacion</th></tr></thead>
           <tbody>
-            <tr><td>PID normal</td><td>{normal['max_tilt']:.2f} deg</td><td>{normal['iae']:.4f}</td><td>{normal['max_x']:.3f} m</td><td>{normal['max_rpm']:.1f}</td><td>Base estable y sencilla.</td></tr>
-            <tr><td>PID IA</td><td>{ai['max_tilt']:.2f} deg</td><td>{ai['iae']:.4f}</td><td>{ai['max_x']:.3f} m</td><td>{ai['max_rpm']:.1f}</td><td>Mejor estabilidad angular con mas esfuerzo de motor.</td></tr>
+            <tr><td>PID normal</td><td>{normal['max_tilt']:.2f} deg</td><td>{normal['iae']:.4f}</td><td>{normal['max_x']:.3f} m</td><td>{normal['final_abs_x']:.3f} m</td><td>{normal['max_rpm']:.1f}</td><td>Base estable y sencilla.</td></tr>
+            <tr><td>PID IA</td><td>{ai['max_tilt']:.2f} deg</td><td>{ai['iae']:.4f}</td><td>{ai['max_x']:.3f} m</td><td>{ai['final_abs_x']:.3f} m</td><td>{ai['max_rpm']:.1f}</td><td>Mejor estabilidad angular y menor deriva final con mas esfuerzo.</td></tr>
           </tbody>
         </table>
       </div>
@@ -373,4 +406,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
 

@@ -315,6 +315,7 @@ def simulate(
                 "tilt_rate_rad_s": state.theta_dot,
                 "tilt_rate_deg_s": theta_rate_deg_s,
                 "x_m": state.x,
+                "abs_x_m": abs(state.x),
                 "x_dot_m_s": state.x_dot,
                 "command_accel_m_s2": output.accel,
                 "command_motor_rpm": output.rpm,
@@ -384,7 +385,15 @@ def polyline(rows: list[dict[str, float | str]], x_key: str, y_key: str, box: tu
     return " ".join(points)
 
 
-def render_chart(title: str, key: str, unit: str, results: list[SimResult], y_pad: float = 0.08) -> str:
+def render_chart(
+    title: str,
+    key: str,
+    unit: str,
+    results: list[SimResult],
+    sim: SimulationParams,
+    y_pad: float = 0.08,
+    note: str | None = None,
+) -> str:
     values = [float(row[key]) for result in results for row in result.rows]
     x_max = max(float(row["time_s"]) for result in results for row in result.rows)
     y_min = min(values)
@@ -395,34 +404,55 @@ def render_chart(title: str, key: str, unit: str, results: list[SimResult], y_pa
     pad = max((y_max - y_min) * y_pad, 0.1)
     y_min -= pad
     y_max += pad
-    box = (64, 24, 820, 240)
+    box = (64, 34, 820, 230)
     zero_y = None
     if y_min < 0.0 < y_max:
         zero_y = box[1] + box[3] * (1.0 - (0.0 - y_min) / (y_max - y_min))
 
+    def xy(row: dict[str, float | str]) -> tuple[float, float]:
+        sx = box[0] + box[2] * (float(row["time_s"]) / x_max if x_max else 0.0)
+        sy = box[1] + box[3] * (1.0 - (float(row[key]) - y_min) / (y_max - y_min))
+        return sx, sy
+
     colors = {"PID normal": "#1f77b4", "PID IA": "#d62728"}
     lines = []
+    final_labels = []
     for result in results:
         pts = polyline(result.rows, "time_s", key, box, x_max, y_min, y_max)
+        final_x, final_y = xy(result.rows[-1])
+        final_value = float(result.rows[-1][key])
+        label = f"{result.name}: {final_value:.2f}{(' ' + unit) if unit else ''}"
+        label_y = max(box[1] + 12, min(box[1] + box[3] - 8, final_y))
         lines.append(
             f'<polyline points="{pts}" fill="none" stroke="{colors[result.name]}" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round" />'
         )
+        final_labels.append(f'<circle cx="{final_x:.2f}" cy="{final_y:.2f}" r="3.5" fill="{colors[result.name]}" />')
+        final_labels.append(f'<text x="{min(final_x + 8, box[0] + box[2] - 145):.2f}" y="{label_y:.2f}" font-size="11" fill="{colors[result.name]}">{html.escape(label)}</text>')
     zero_line = ""
     if zero_y is not None:
         zero_line = f'<line x1="64" x2="884" y1="{zero_y:.2f}" y2="{zero_y:.2f}" stroke="#8a8f98" stroke-dasharray="5 5" />'
+    impulse_x = box[0] + box[2] * min(max(sim.impulse_time_s, 0.0), x_max) / x_max
+    impulse = (
+        f'<line x1="{impulse_x:.2f}" x2="{impulse_x:.2f}" y1="{box[1]}" y2="{box[1] + box[3]}" stroke="#8f5b00" stroke-width="1.6" stroke-dasharray="7 5" />'
+        f'<text x="{min(impulse_x + 6, box[0] + box[2] - 115):.2f}" y="{box[1] + 14}" font-size="11" fill="#8f5b00">perturbacion t={sim.impulse_time_s:.1f}s</text>'
+    )
+    note_html = f'<p class="chart-note">{html.escape(note)}</p>' if note else ""
     return f"""
 <section class="chart">
   <h2>{html.escape(title)}</h2>
-  <svg viewBox="0 0 920 310" role="img" aria-label="{html.escape(title)}">
-    <rect x="64" y="24" width="820" height="240" fill="#ffffff" stroke="#d6d9de" />
+  {note_html}
+  <svg viewBox="0 0 920 310" role="img" aria-label="{html.escape(title)} con perturbacion marcada">
+    <rect x="64" y="34" width="820" height="230" fill="#ffffff" stroke="#d6d9de" />
     {zero_line}
+    {impulse}
     <line x1="64" x2="884" y1="264" y2="264" stroke="#4b5563" />
-    <line x1="64" x2="64" y1="24" y2="264" stroke="#4b5563" />
+    <line x1="64" x2="64" y1="34" y2="264" stroke="#4b5563" />
     <text x="64" y="292" font-size="12">0 s</text>
     <text x="835" y="292" font-size="12">{x_max:.1f} s</text>
-    <text x="8" y="32" font-size="12">{y_max:.2f} {html.escape(unit)}</text>
+    <text x="8" y="42" font-size="12">{y_max:.2f} {html.escape(unit)}</text>
     <text x="8" y="264" font-size="12">{y_min:.2f} {html.escape(unit)}</text>
     {''.join(lines)}
+    {''.join(final_labels)}
   </svg>
 </section>
 """
@@ -451,12 +481,13 @@ def write_html(path: Path, results: list[SimResult], sim: SimulationParams, robo
         )
 
     charts = [
-        render_chart("Inclinacion del robot", "tilt_deg", "deg", results),
-        render_chart("Comando de aceleracion de la base", "command_accel_m_s2", "m/s^2", results),
-        render_chart("Deriva de posicion", "x_m", "m", results),
-        render_chart("RPM equivalente del motor", "command_motor_rpm", "rpm", results),
-        render_chart("Ganancia Kp adaptativa", "kp", "", results),
-        render_chart("Peso del experto de recuperacion", "expert_recovery", "", results),
+        render_chart("Inclinacion del robot", "tilt_deg", "deg", results, sim, note="La linea vertical marca cuando entra la perturbacion externa."),
+        render_chart("Comando de aceleracion de la base", "command_accel_m_s2", "m/s^2", results, sim, note="La respuesta del PID IA puede pedir mas aceleracion para corregir el golpe."),
+        render_chart("Deriva de posicion", "x_m", "m", results, sim, note="Muestra hacia donde se desplaza la base despues de la perturbacion."),
+        render_chart("Magnitud de deriva |x|", "abs_x_m", "m", results, sim, note="Muestra si la distancia al origen baja aunque la posicion cambie de signo."),
+        render_chart("RPM equivalente del motor", "command_motor_rpm", "rpm", results, sim, note="Permite ver el costo de la mejora en esfuerzo de motor."),
+        render_chart("Ganancia Kp adaptativa", "kp", "", results, sim, note="En el PID IA la ganancia cambia segun la mezcla de expertos."),
+        render_chart("Peso del experto de recuperacion", "expert_recovery", "", results, sim, note="Este peso debe aumentar cuando el controlador detecta mayor riesgo de caida."),
     ]
     html_doc = f"""<!doctype html>
 <html lang="es">
@@ -485,6 +516,7 @@ def write_html(path: Path, results: list[SimResult], sim: SimulationParams, robo
     .red {{ background: #d62728; }}
     .chart {{ max-width: 980px; margin: 18px 0; background: #fff; border: 1px solid #d9dde3; border-radius: 8px; padding: 14px 16px; }}
     .chart h2 {{ margin: 0 0 8px; font-size: 18px; }}
+    .chart-note {{ margin: -2px 0 8px; color: #536171; font-size: 13px; }}
     svg {{ width: 100%; height: auto; }}
     code {{ background: #e9edf2; padding: 2px 5px; border-radius: 4px; }}
   </style>
@@ -558,5 +590,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
 
 
