@@ -414,3 +414,69 @@ Archivo resultante:
 ```text
 data/sim_2d/guia_compendio_pid_ia_2d.html
 ```
+## 21. Teoria ampliada para interpretar la simulacion
+
+### 21.1 Por que el robot es un pendulo invertido
+
+Un robot auto-balanceado de dos ruedas es inestable por naturaleza. Esto significa que la posicion vertical no es una posicion de reposo segura; es una posicion que debe corregirse continuamente. Si el cuerpo se inclina aunque sea un poco, el centro de masa deja de estar alineado con el eje de las ruedas y la gravedad genera un torque que aumenta la caida.
+
+La comparacion con un pendulo invertido ayuda porque el cuerpo del robot se parece a una barra que intenta caer, mientras que las ruedas actuan como una base movil. El controlador no empuja directamente el cuerpo del robot; lo que hace es mover las ruedas para colocar de nuevo la base debajo del centro de masa.
+
+La idea fisica principal es:
+
+```text
+si el cuerpo se inclina -> mover la base para recuperar el centro de masa
+```
+
+Por eso el sentido del comando de motor es tan importante. Si las ruedas aceleran hacia el lado equivocado, el robot no se recupera; al contrario, se cae mas rapido.
+
+### 21.2 Que representa la perturbacion
+
+En la simulacion se aplica una perturbacion en un instante definido, por defecto:
+
+```text
+t = 4.0 s
+```
+
+Esta perturbacion representa un golpe, empuje o cambio externo que intenta sacar al robot de su equilibrio. En las graficas se marca con una linea vertical para que el estudiante pueda separar tres momentos:
+
+- Antes de la perturbacion: el controlador intenta mantener el robot estable.
+- Durante la perturbacion: el sistema recibe un cambio brusco.
+- Despues de la perturbacion: se observa si el controlador se recupera o si el error sigue creciendo.
+
+Una buena respuesta no significa que la curva no se mueva. Una buena respuesta significa que, despues del golpe, el robot reduce el error, evita la caida y vuelve hacia una region cercana al equilibrio.
+
+### 21.3 Como interpretar la deriva
+
+La posicion horizontal `x` indica hacia que lado se desplaza la base del robot. Puede ser positiva o negativa. Sin embargo, para saber si el robot esta cerca o lejos del punto inicial, conviene observar la magnitud:
+
+```text
+|x| = distancia al origen sin importar el lado
+```
+
+Por eso se agrego la grafica de magnitud de deriva `|x|`. Si `|x|` baja despues de la perturbacion, significa que el robot esta regresando hacia el origen. Si `|x|` crece, significa que el robot se esta alejando cada vez mas.
+
+En los resultados actuales, el PID potenciado por IA termina con menor `|x|` final que el PID normal. Eso permite decir que, ademas de mejorar el error angular, tambien deja al robot mas cerca del punto de partida.
+
+### 21.4 Que significa que el PID IA mejore
+
+La mejora del PID IA debe analizarse con varias metricas al mismo tiempo:
+
+- Menor inclinacion maxima: el cuerpo se aleja menos de la vertical.
+- Menor error acumulado: el robot pasa mas tiempo cerca del objetivo.
+- Menor `|x|` final: termina mas cerca del origen.
+- Mayor RPM maxima: puede requerir mas esfuerzo del motor.
+
+Esto es importante porque en control casi nunca existe una mejora gratuita. Un controlador puede verse mejor porque corrige mas rapido, pero esa correccion puede exigir mas energia o mas velocidad de motor. En un robot fisico real, ese costo debe revisarse con cuidado para no saturar los motores ni volver insegura la prueba.
+
+### 21.5 Lectura recomendada de las graficas
+
+Para analizar cada grafica, se recomienda seguir este orden:
+
+1. Ubicar la linea vertical de perturbacion.
+2. Observar que ocurre justo despues del golpe.
+3. Comparar la curva azul del PID normal con la curva roja del PID IA.
+4. Revisar si la curva se acerca a cero o si se aleja.
+5. Confirmar la interpretacion con las metricas numericas.
+
+La conclusion no debe basarse solo en una imagen. Debe justificarse usando la animacion, las curvas y la tabla de metricas.

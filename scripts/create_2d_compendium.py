@@ -238,6 +238,7 @@ def build_html(data: dict[str, list[dict[str, float]]], anim_data: dict[str, lis
     <a href="#objetivo">Objetivo</a>
     <a href="#modelo">Modelo 2D</a>
     <a href="#control">Controladores</a>
+    <a href="#perturbacion">Perturbacion</a>
     <a href="#resultados">Resultados</a>
     <a href="#animacion">Animacion</a>
     <a href="#graficas">Graficas</a>
@@ -247,40 +248,59 @@ def build_html(data: dict[str, list[dict[str, float]]], anim_data: dict[str, lis
 <main>
   <section id="objetivo" class="panel">
     <h2>1. Objetivo de aprendizaje</h2>
-    <p>Comprender como se estabiliza un robot auto-balanceado usando un controlador PID clasico y como una capa de inteligencia artificial puede ajustar sus ganancias para mejorar el desempeno.</p>
-    <div class="callout"><strong>Idea central:</strong> el PID IA no reemplaza al PID. Lo potencia ajustando <code>Kp</code>, <code>Ki</code> y <code>Kd</code> segun el estado del robot.</div>
+    <p>Comprender como se estabiliza un robot auto-balanceado usando un controlador PID clasico y como una capa de inteligencia artificial puede ajustar sus ganancias para mejorar el desempeno ante una perturbacion.</p>
+    <div class="callout"><strong>Idea central:</strong> el PID IA no reemplaza al PID. Lo potencia ajustando <code>Kp</code>, <code>Ki</code> y <code>Kd</code> segun el estado del robot: cerca del equilibrio actua suave; ante riesgo de caida actua mas fuerte; ante deriva intenta volver hacia el origen.</div>
   </section>
 
   <section id="modelo" class="panel">
-    <h2>2. Modelo 2D del robot</h2>
-    <p>El robot se representa como un pendulo invertido sobre ruedas. La variable principal es <code>theta</code>, el angulo del cuerpo respecto a la vertical. Cuando <code>theta = 0</code>, el robot esta de pie.</p>
+    <h2>2. Teoria del modelo 2D</h2>
+    <p>Un robot auto-balanceado de dos ruedas es un sistema naturalmente inestable. Si esta perfectamente vertical puede mantenerse por un instante, pero cualquier pequeno error angular genera un torque por gravedad que hace crecer la inclinacion. Por eso se estudia como un <strong>pendulo invertido sobre una base movil</strong>.</p>
+    <p>La variable principal es <code>theta</code>, el angulo del cuerpo respecto a la vertical. Cuando <code>theta = 0</code>, el centro de masa esta alineado sobre el eje de las ruedas. Cuando <code>theta</code> se aleja de cero, el centro de masa queda desplazado y la gravedad empieza a tumbar el robot.</p>
     <pre><code>theta_ddot = (g / L) * sin(theta) - (x_ddot / L) * cos(theta) - damping * theta_dot</code></pre>
-    <p>Este modelo simplificado permite probar ideas de control antes de pasar a Gazebo 3D o al robot fisico.</p>
+    <ul>
+      <li><code>(g / L) * sin(theta)</code>: representa la caida producida por la gravedad.</li>
+      <li><code>-(x_ddot / L) * cos(theta)</code>: representa la correccion generada al acelerar las ruedas.</li>
+      <li><code>damping * theta_dot</code>: representa perdidas y amortiguamiento que reducen oscilaciones.</li>
+    </ul>
+    <p>La intuicion fisica es esta: el robot no se endereza empujando el cuerpo directamente; se endereza moviendo la base. Las ruedas deben acelerar para colocar el punto de apoyo debajo del centro de masa. Si aceleran en el sentido incorrecto, la caida empeora.</p>
   </section>
 
   <section id="control" class="panel">
-    <h2>3. Controladores comparados</h2>
+    <h2>3. Teoria de control: PID normal y PID IA</h2>
     <div class="two-col">
       <article>
         <h3>PID normal</h3>
-        <p>Usa ganancias fijas durante toda la simulacion:</p>
+        <p>El PID normal usa ganancias fijas durante toda la simulacion. Calcula una accion de control a partir del error angular, su acumulacion y su velocidad de cambio:</p>
         <pre><code>u = Kp * error + Ki * integral(error) + Kd * derivative(error)</code></pre>
-        <p>Es simple, explicable y muy bueno como linea base.</p>
+        <ul>
+          <li><strong>Kp:</strong> empuja mas fuerte cuando el angulo esta lejos de cero.</li>
+          <li><strong>Ki:</strong> corrige errores persistentes, pero puede causar acumulacion excesiva.</li>
+          <li><strong>Kd:</strong> frena el movimiento cuando el robot se inclina muy rapido.</li>
+        </ul>
+        <p>Su ventaja es que es simple y facil de explicar. Su desventaja es que responde igual aunque el robot este casi estable, cayendo rapido o derivando.</p>
       </article>
       <article>
         <h3>PID potenciado por IA</h3>
-        <p>Usa una mezcla de expertos para cambiar ganancias segun la situacion:</p>
+        <p>El PID IA usa una mezcla de expertos. No es una caja negra completa: sigue siendo un PID, pero sus ganancias cambian segun el estado del robot.</p>
         <ul>
           <li><strong>Balance:</strong> movimientos suaves cerca de cero grados.</li>
           <li><strong>Recuperacion:</strong> accion fuerte cuando hay riesgo de caida.</li>
           <li><strong>Deriva:</strong> corrige desplazamiento horizontal acumulado.</li>
         </ul>
+        <p>La capa inteligente calcula pesos para cada experto. Si aumenta el riesgo de caida, sube el peso de recuperacion; si el robot se aleja del origen, sube el peso de deriva. La mejora esperada no es que el robot nunca se mueva, sino que se aleje menos de la vertical y termine con menor error.</p>
       </article>
     </div>
   </section>
 
+  <section id="perturbacion" class="panel">
+    <h2>4. Perturbacion y como leer las graficas</h2>
+    <p>La simulacion aplica una perturbacion externa en <strong>t = 4.0 s</strong>. En las graficas aparece como una linea vertical. Esa linea representa un golpe o empuje sobre el sistema: no es un error de la grafica, es la prueba que usamos para ver si el controlador puede recuperarse.</p>
+    <div class="callout"><strong>Antes del golpe:</strong> se observa que tan bien el controlador mantiene el robot cerca de cero. <strong>Durante el golpe:</strong> aparece un cambio brusco en inclinacion, RPM o aceleracion. <strong>Despues del golpe:</strong> se evalua si el robot vuelve hacia la vertical y si la deriva <code>|x|</code> baja o queda creciendo.</div>
+    <p>La deriva firmada <code>x</code> indica hacia que lado se movio el robot. La magnitud <code>|x|</code> indica que tan lejos esta del origen sin importar el lado. Por eso se agrego la grafica <strong>Magnitud de deriva |x|</strong>: ahi se ve mas claro si el robot termina mas cerca del punto inicial.</p>
+  </section>
+
   <section id="resultados">
-    <h2>4. Resumen de resultados</h2>
+    <h2>5. Resumen de resultados</h2>
     <div class="grid">
       <article class="metric good"><strong>Mejora visible 1</strong><b>{peak_gain:.1f}% menos pico</b><small>El PID IA alcanza menor inclinacion maxima: {ai['max_tilt']:.2f} deg vs {normal['max_tilt']:.2f} deg.</small></article>
       <article class="metric good"><strong>Mejora visible 2</strong><b>{iae_gain:.1f}% menos error</b><small>El error absoluto integrado baja de {normal['iae']:.4f} a {ai['iae']:.4f}.</small></article>
@@ -301,7 +321,7 @@ def build_html(data: dict[str, list[dict[str, float]]], anim_data: dict[str, lis
   </section>
 
   <section id="animacion" class="panel">
-    <h2>5. Animacion de estabilizacion</h2>
+    <h2>6. Animacion de estabilizacion</h2>
     <canvas id="canvas" width="1080" height="560"></canvas>
     <div class="controls">
       <button id="play" type="button">Pausa</button>
@@ -313,13 +333,13 @@ def build_html(data: dict[str, list[dict[str, float]]], anim_data: dict[str, lis
   </section>
 
   <section id="graficas" class="panel">
-    <h2>6. Graficas principales</h2>
+    <h2>7. Graficas principales</h2>
     <div class="legend"><span><i class="swatch blue"></i>PID normal</span><span><i class="swatch red"></i>PID IA</span></div>
     {charts}
   </section>
 
   <section id="actividades" class="panel">
-    <h2>7. Actividades para estudiantes</h2>
+    <h2>8. Actividades para estudiantes</h2>
     <h3>Actividad 1: Observar la mejora</h3>
     <ol><li>Reproduce la animacion.</li><li>Compara cual cuerpo se aleja mas de la vertical.</li><li>Relaciona lo observado con la metrica de max tilt.</li></ol>
     <h3>Actividad 2: Cambiar condiciones iniciales</h3>
@@ -406,6 +426,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
 
 
 
