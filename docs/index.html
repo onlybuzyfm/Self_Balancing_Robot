@@ -3,31 +3,167 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Robot Auto-Balanceado - PID vs PID IA</title>
-  <style>
-    body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f4f6f8; color: #17202a; }
-    main { max-width: 900px; margin: 0 auto; padding: 42px 28px 56px; }
-    h1 { font-size: 34px; margin: 0 0 12px; }
-    p { line-height: 1.55; color: #465463; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 24px; }
-    a.card { display: block; background: #fff; border: 1px solid #d8dee6; border-radius: 8px; padding: 18px; color: inherit; text-decoration: none; }
-    a.card:hover { border-color: #1f77b4; box-shadow: 0 6px 20px rgba(31, 119, 180, 0.12); }
-    .card strong { display: block; font-size: 18px; margin-bottom: 8px; }
-    code { background: #e9edf2; border-radius: 4px; padding: 2px 5px; }
-  </style>
+  <meta name="description" content="Modelo digital y banco de pruebas de control para un robot autoequilibrado de dos ruedas." />
+  <title>PerceptIA | Robot autoequilibrado</title>
+  <link rel="icon" href="assets/perceptia-logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="assets/site.css" />
+  <script src="assets/site.js" defer></script>
 </head>
 <body>
-<main>
-  <h1>Robot Auto-Balanceado: PID vs PID potenciado por IA</h1>
-  <p>Material educativo para ejecutar una simulacion 2D de un robot auto-balanceado, comparar un PID clasico contra un PID con mezcla de expertos, revisar graficas, animacion y fundamentos teoricos.</p>
-  <div class="grid">
-    <a class="card" href="compendio_estudiantes_ejecucion_simulacion.html"><strong>Guia para estudiantes</strong><span>Requisitos, comandos de ejecucion, errores comunes y actividad de entrega.</span></a>
-    <a class="card" href="guia_compendio_pid_ia_2d.html"><strong>Compendio interactivo</strong><span>Guia, metricas, graficas y animacion en un solo HTML.</span></a>
-    <a class="card" href="informe_teorico_pid_ia_robot_auto_balanceado.pdf"><strong>PDF teorico</strong><span>Modelo de pendulo invertido, PID, PID IA y conexion con Gazebo.</span></a>
-    <a class="card" href="pid_vs_pid_ai_2d_animation.html"><strong>Animacion</strong><span>Visualizacion lado a lado del PID normal y PID potenciado por IA.</span></a>
-  </div>
-  <p>Codigo fuente y comandos en el repositorio. Para ejecutar localmente: <code>python scripts/sim_2d_pid_ai.py</code>.</p>
-</main>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="PerceptIA, inicio">
+      <img src="assets/perceptia-logo.svg" alt="Pájaro de PerceptIA" />
+      <span>PerceptIA</span>
+    </a>
+    <nav aria-label="Secciones del proyecto">
+      <a href="#estado">Estado</a>
+      <a href="#resultados">Resultados</a>
+      <a href="#arquitectura">Arquitectura</a>
+      <a href="#control">Control</a>
+      <a href="#demostracion">Demostración</a>
+      <a href="#recursos">Recursos</a>
+    </nav>
+  </header>
+
+  <main id="contenido" class="shell">
+    <section id="inicio" class="intro" aria-labelledby="titulo-proyecto">
+      <div>
+        <p class="kicker">Modelo digital + control de equilibrio</p>
+        <h1 id="titulo-proyecto">Robot autoequilibrado de dos ruedas con PID y mezcla de expertos</h1>
+        <p class="lead">Entorno educativo para estudiar el péndulo invertido, comparar controladores en 2D y trasladar las hipótesis a ROS 2 y Gazebo antes de trabajar con el Tumbller físico.</p>
+        <div class="intro-actions">
+          <a class="button" href="#demostracion">Abrir simulación</a>
+          <a class="button secondary" href="exposicion/Presentacion_PerceptIA_Robot_Autoequilibrado.pptx">Descargar presentación</a>
+        </div>
+      </div>
+      <aside class="scope-note" aria-label="Alcance de la evidencia">
+        <strong>Alcance verificado</strong>
+        <p><span class="data-tag">Datos simulados</span></p>
+        <p>Las métricas publicadas provienen del banco 2D incluido en el repositorio. El modelo Gazebo es un gemelo digital inicial. No se presentan pruebas físicas del robot.</p>
+      </aside>
+    </section>
+
+    <section id="estado" class="status-band" aria-label="Estado del proyecto">
+      <div class="status-grid">
+        <div class="status-item"><span class="status-label">Robot</span><span class="status-value">Gemelo digital</span><span class="status-detail">SDF para Gazebo Sim</span></div>
+        <div class="status-item"><span class="status-label">Banco 2D</span><span class="status-value ok">Ambos no caen</span><span class="status-detail">Escenario reproducido de 12 s</span></div>
+        <div class="status-item"><span class="status-label">Perturbación</span><span class="status-value">t = 4,0 s</span><span class="status-detail">-2,5 m/s² durante 0,12 s</span></div>
+        <div class="status-item"><span class="status-label">Hardware físico</span><span class="status-value tradeoff">Pendiente</span><span class="status-detail">Falta calibrar con medidas reales</span></div>
+      </div>
+    </section>
+
+    <section id="resultados" class="section" aria-labelledby="titulo-resultados">
+      <div class="section-heading">
+        <h2 id="titulo-resultados">Qué mejora y cuál es el costo</h2>
+        <p>El PID adaptativo mezcla tres expertos transparentes: equilibrio, recuperación y corrección de deriva. En el escenario por defecto reduce el error angular y la deriva final, pero exige un pico de motor mayor.</p>
+      </div>
+      <div class="telemetry-grid" aria-label="Telemetría resumida del banco 2D">
+        <article class="telemetry-item"><h3>Inclinación máxima</h3><p class="telemetry-number">14,64°</p><small>PID IA; PID normal: 15,95°</small></article>
+        <article class="telemetry-item"><h3>Velocidad de la base</h3><p class="telemetry-number">±1,2 m/s</p><small>Límite del modelo 2D, no medición física</small></article>
+        <article class="telemetry-item"><h3>Señal de control</h3><p class="telemetry-number">133,3 rpm</p><small>Pico equivalente del PID IA</small></article>
+        <article class="telemetry-item"><h3>Deriva final |x|</h3><p class="telemetry-number">0,094 m</p><small>PID normal: 0,129 m</small></article>
+      </div>
+      <div class="chart-shell">
+        <div class="chart-toolbar">
+          <strong>Inclinación frente al tiempo</strong>
+          <div class="legend" aria-label="Leyenda"><span><i></i>PID normal</span><span><i class="ai"></i>PID IA</span><span><i class="perturbation"></i>Perturbación</span></div>
+        </div>
+        <canvas id="tilt-chart" role="img"></canvas>
+      </div>
+      <div class="result-table-wrap">
+        <table class="result-table">
+          <thead><tr><th>Métrica simulada</th><th>PID normal</th><th>PID IA</th><th>Lectura</th></tr></thead>
+          <tbody>
+            <tr><td>Caída en 12 s</td><td>No</td><td>No</td><td>Empate en este escenario</td></tr>
+            <tr><td>Pico de inclinación</td><td>15,95°</td><td>14,64°</td><td class="better">8,2% menor</td></tr>
+            <tr><td>IAE angular</td><td>1,5025</td><td>1,3484</td><td class="better">10,3% menor</td></tr>
+            <tr><td>Deriva final |x|</td><td>0,129 m</td><td>0,094 m</td><td class="better">26,6% menor</td></tr>
+            <tr><td>Pico equivalente de motor</td><td>100,9 rpm</td><td>133,3 rpm</td><td class="cost">32,1% mayor</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="arquitectura" class="section" aria-labelledby="titulo-arquitectura">
+      <div class="section-heading">
+        <h2 id="titulo-arquitectura">Arquitectura del sistema</h2>
+        <p>El mismo ciclo conceptual conecta el banco 2D y Gazebo: observar la inclinación, calcular la corrección, limitar el comando y mover ambas ruedas para recuperar la vertical.</p>
+      </div>
+      <div class="architecture" role="list" aria-label="Flujo de información">
+        <article class="architecture-step" role="listitem"><strong>1. Cuerpo</strong><p>Péndulo invertido sobre dos ruedas, con centro de masa por encima del eje.</p></article>
+        <article class="architecture-step" role="listitem"><strong>2. IMU</strong><p>Publica orientación y velocidad angular del chasis en la simulación Gazebo.</p></article>
+        <article class="architecture-step" role="listitem"><strong>3. ROS 2</strong><p>El puente ros_gz entrega la IMU al nodo de control y distribuye telemetría.</p></article>
+        <article class="architecture-step" role="listitem"><strong>4. Controller Balance</strong><p>Calcula aceleración y la integra como velocidad de rueda con límites de seguridad.</p></article>
+        <article class="architecture-step" role="listitem"><strong>5. Motores</strong><p>Los controladores de joints aplican velocidad a las ruedas izquierda y derecha.</p></article>
+      </div>
+    </section>
+
+    <section id="control" class="section" aria-labelledby="titulo-control">
+      <div class="section-heading">
+        <h2 id="titulo-control">Modelo y estrategia de control</h2>
+        <p>La base debe acelerarse hacia la caída para llevar el punto de apoyo bajo el centro de masa. El modelo 2D integra la dinámica no lineal con Runge-Kutta de cuarto orden cada 5 ms.</p>
+      </div>
+      <div class="control-layout">
+        <div>
+          <div class="equation" aria-label="Ecuación aproximada del péndulo invertido">θ̈ = (g/L)·sin(θ) − (ẍ/L)·cos(θ) − b·θ̇</div>
+          <p>El PID normal mantiene ganancias fijas. El PID IA conserva el núcleo PID, pero combina las ganancias de tres expertos mediante pesos calculados a partir de |θ|, |θ̇| y |x|. Es una compuerta heurística transparente; todavía no es una red entrenada.</p>
+        </div>
+        <dl class="parameter-list" aria-label="Parámetros del escenario 2D">
+          <div><dt>PID fijo Kp / Ki / Kd</dt><dd>13,5 / 0,25 / 2,25</dd></div>
+          <div><dt>Altura del centro de masa</dt><dd>0,105 m</dd></div>
+          <div><dt>Radio de rueda</dt><dd>0,034 m</dd></div>
+          <div><dt>Inclinación inicial</dt><dd>7°</dd></div>
+          <div><dt>Aceleración máxima</dt><dd>8,0 m/s²</dd></div>
+          <div><dt>Umbral de caída</dt><dd>45°</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section id="demostracion" class="section" aria-labelledby="titulo-demostracion">
+      <div class="section-heading">
+        <h2 id="titulo-demostracion">Demostración simulada</h2>
+        <p>La animación usa el CSV generado por el banco 2D. Sus controles de reproducción, reinicio, velocidad y tiempo se conservan dentro del módulo interactivo.</p>
+      </div>
+      <iframe class="demo-frame" src="pid_vs_pid_ai_2d_animation.html" title="Animación comparativa del PID normal y PID IA" loading="lazy"></iframe>
+      <div class="demo-links">
+        <a class="button" href="pid_vs_pid_ai_2d_animation.html">Abrir animación completa</a>
+        <a class="button secondary" href="pid_vs_pid_ai_2d.html">Abrir todas las gráficas</a>
+        <a class="button secondary" href="guia_compendio_pid_ia_2d.html">Abrir compendio interactivo</a>
+      </div>
+    </section>
+
+    <section id="recursos" class="section compact" aria-labelledby="titulo-recursos">
+      <div class="section-heading"><h2 id="titulo-recursos">Material para estudiar y exponer</h2><p>Todos los enlaces se sirven desde el mismo repositorio y pueden compartirse con las estudiantes.</p></div>
+      <div class="resources">
+        <a class="resource" href="compendio_estudiantes_ejecucion_simulacion.html"><strong>Guía de ejecución</strong><span>Requisitos, comandos, problemas comunes y actividad.</span></a>
+        <a class="resource" href="informe_teorico_pid_ia_robot_auto_balanceado.pdf"><strong>Informe teórico</strong><span>Péndulo invertido, PID, mezcla de expertos y transición a Gazebo.</span></a>
+        <a class="resource" href="exposicion/Presentacion_PerceptIA_Robot_Autoequilibrado.pptx"><strong>PowerPoint editable</strong><span>Presentación académica de 10 diapositivas.</span></a>
+        <a class="resource" href="exposicion/Diapositivas_PerceptIA_Robot_Autoequilibrado.pdf"><strong>Diapositivas en PDF</strong><span>Versión lista para proyectar.</span></a>
+        <a class="resource" href="exposicion/Guion_Exposicion_Robot_10_min.pdf"><strong>Guion de 10 minutos</strong><span>Texto por diapositiva, transiciones y preguntas probables.</span></a>
+        <a class="resource" href="pid_vs_pid_ai_2d.csv"><strong>Datos CSV</strong><span>Telemetría reproducible de ambos controladores.</span></a>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="titulo-limitaciones">
+      <div class="section-heading">
+        <h2 id="titulo-limitaciones">Limitaciones y siguientes pasos</h2>
+        <p>El repositorio es una plataforma de preparación. La validación útil en hardware comienza cuando se sustituyen las aproximaciones geométricas y dinámicas por mediciones del robot real.</p>
+      </div>
+      <div class="limitations">
+        <div>
+          <h3>Limitaciones actuales</h3>
+          <ul><li>Masas, inercia, centro de masa y límites de motor son estimaciones.</li><li>La odometría de depuración integra comandos y no encoders físicos.</li><li>La mezcla de expertos es heurística y no ha sido entrenada.</li><li>No existe evidencia de ensayo físico en el repositorio.</li></ul>
+        </div>
+        <div>
+          <h3>Siguientes pasos comprobables</h3>
+          <ul><li>Medir geometría, masa, centro de masa y orientación de la IMU.</li><li>Calibrar signo, saturaciones y límites conservadores del motor.</li><li>Validar perturbaciones repetibles en Gazebo y registrar episodios.</li><li>Comparar luego la compuerta heurística con una política entrenada.</li></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="footer-inner"><p><strong>PerceptIA</strong> · Robot autoequilibrado · Material educativo</p><a href="https://github.com/onlybuzyfm/Self_Balancing_Robot">Código en GitHub</a></div></footer>
 </body>
 </html>
 
